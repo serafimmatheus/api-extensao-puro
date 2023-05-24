@@ -67,4 +67,4 @@ e para parar deletar todos os conteiner -> docker compose down
 ## Versoes
 
 versao do nodeJs - v20.2.0
-versao do npm - 9.6.6
+versao do npm - 9.6.6.
