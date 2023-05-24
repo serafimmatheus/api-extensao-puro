@@ -63,3 +63,8 @@ criar um arquivo docker-compose.yml para passar o codigo acima para dentro do ar
 e para rodar o docker -> docker compose up -d
 e para parar o docker -> docker compose stop
 e para parar deletar todos os conteiner -> docker compose down
+
+## Versoes
+
+versao do nodeJs - v20.2.0
+versao do npm - 9.6.6
