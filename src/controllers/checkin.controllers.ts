@@ -10,13 +10,15 @@ class CheckInControllers {
   findByUserIdOnDate = async (req: FastifyRequest, res: FastifyReply) => {
     const checkinSchema = z.object({
       user_id: z.string().uuid(),
-      date: z.date(),
+      date: z.string(),
     });
 
     const { user_id, date } = checkinSchema.parse(req.body);
 
     try {
       const checkin = await gymServices.findByUserIdOnDate(user_id, date);
+      console.log(checkin);
+
       return res.status(201).send(checkin);
     } catch (error) {
       if (error instanceof MyError) {
