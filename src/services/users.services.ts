@@ -47,12 +47,17 @@ export class UsersServices {
       created_at: user.created_at,
     };
 
-    const token = jwt.sign(newUser, env.SECURITY_TOKEN, { expiresIn: "1d" });
+    return newUser;
+  };
 
-    return {
-      token,
-      user: newUser,
-    };
+  me = async (user_id: string) => {
+    const userMe = await this.usersRepository.findOneUser(user_id);
+
+    if (!userMe) {
+      throw new MyError("User Not found", 404);
+    }
+
+    return userMe;
   };
 
   findAll = async () => {

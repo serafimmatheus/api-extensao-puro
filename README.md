@@ -47,6 +47,7 @@ bibliotecas instaladas
 12 - npm i vitest vite-tsconfig-paths -D
 13 - npm i jsonwebtoken && npm i -D @types/jsonwebtoken
 14 - npm i dayjs
+15 - npm i @fastify/jwt
 
 ## comandos do prisma
 

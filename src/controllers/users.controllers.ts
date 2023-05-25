@@ -1,4 +1,3 @@
-import { env } from "@/env";
 import { MyError } from "@/errors/myError";
 import { makeRegisterUseCase } from "@/factories/make-register-use-case";
 import { prismaUsersRepository } from "@/repositories";
@@ -20,11 +19,30 @@ class UsersControllers {
     try {
       const makeUsersServices = makeRegisterUseCase();
       const user = await makeUsersServices.login({ email, password });
-      return res.status(200).send(user);
+
+      const token = await res.jwtSign(
+        {},
+        {
+          sign: {
+            sub: user.id,
+          },
+        }
+      );
+
+      return res.status(200).send({ token });
     } catch (error) {
       if (error instanceof MyError) {
         return res.status(error.status).send({ message: error.message });
       }
+    }
+  };
+
+  me = async (req: FastifyRequest, res: FastifyReply) => {
+    try {
+      const user = await usersServices.me(req.user.sub);
+      return res.status(200).send({ ...user, password_hash: undefined });
+    } catch (error) {
+      return res.status(400).send();
     }
   };
 
