@@ -74,12 +74,23 @@ class UsersControllers {
       name: z.string().min(1).max(30),
       email: z.string().email(),
       password: z.string().min(6).max(30),
+      chaveApi: z.string(),
+      isActive: z.boolean().default(false),
+      isAdm: z.boolean().default(false),
     });
 
-    const { email, name, password } = registerBodySchema.parse(req.body);
+    const { email, name, password, chaveApi, isActive, isAdm } =
+      registerBodySchema.parse(req.body);
 
     try {
-      await usersServices.create({ email, name, password });
+      await usersServices.create({
+        email,
+        name,
+        password,
+        chaveApi,
+        isActive,
+        isAdm,
+      });
       return res.status(201).send();
     } catch (error) {
       if (error instanceof MyError) {

@@ -15,7 +15,10 @@ id              String @id @default(uuid())
   name          String
   email         String @unique
   password_hash String
+  chaveApi      String @unique
   created_at    DateTime @default(now())
+  isAcive       Boolean @default(false)
+  isAdm         Boolean @default(false)
 
   checkIns       CheckIn[]
 
