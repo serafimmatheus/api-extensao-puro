@@ -9,6 +9,9 @@ interface CreateUserIProps {
   name: string;
   email: string;
   password: string;
+  chaveApi: string;
+  isAdm: boolean;
+  isActive: boolean;
 }
 
 interface UserIProps {
@@ -90,7 +93,14 @@ export class UsersServices {
     };
   };
 
-  create = async ({ email, name, password }: CreateUserIProps) => {
+  create = async ({
+    email,
+    name,
+    password,
+    chaveApi,
+    isActive,
+    isAdm,
+  }: CreateUserIProps) => {
     const password_hash = await hash(password, 10);
 
     const userWithSameEmail = await this.usersRepository.findOneForEmail(email);
@@ -99,7 +109,14 @@ export class UsersServices {
       throw new MyError("User already exists", 409);
     }
 
-    const data = { email, name, password_hash };
+    const data = {
+      email,
+      name,
+      password_hash,
+      chaveApi,
+      isActive,
+      isAdm,
+    };
 
     const user = await this.usersRepository.create(data);
 
