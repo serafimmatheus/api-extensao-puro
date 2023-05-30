@@ -8,15 +8,12 @@ export interface UsersRepositoryProps {
   delete: (id: string) => Promise<User>;
   findOneUser: (id: string) => Promise<User | null>;
   updated: (data: Prisma.UserCreateInput, id: string) => Promise<User>;
+  updatedIsActive: (id: string, isActive: boolean) => Promise<User>;
 }
 
 class PrismaUserRepository implements UsersRepositoryProps {
   allUsers = async () => {
-    return await prisma.user.findMany({
-      include: {
-        checkIns: true,
-      },
-    });
+    return await prisma.user.findMany();
   };
 
   findOneForEmail = async (email: string) => {
@@ -48,6 +45,19 @@ class PrismaUserRepository implements UsersRepositoryProps {
   updated = async (data: Prisma.UserCreateInput, id: string) => {
     const user = await prisma.user.update({
       data,
+      where: {
+        id,
+      },
+    });
+
+    return user;
+  };
+
+  updatedIsActive = async (id: string, isActive: boolean) => {
+    const user = await prisma.user.update({
+      data: {
+        isActive,
+      },
       where: {
         id,
       },

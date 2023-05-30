@@ -1,17 +1,14 @@
-import { env } from "@/env";
 import { MyError } from "@/errors/myError";
 import { UsersRepositoryProps } from "@/repositories/prisma-users-repository";
-import { CheckIn, User } from "@prisma/client";
 import { compare, hash } from "bcryptjs";
-import jwt from "jsonwebtoken";
 
 interface CreateUserIProps {
   name: string;
   email: string;
   password: string;
   chaveApi: string;
-  isAdm: boolean;
   isActive: boolean;
+  isAdm: boolean;
 }
 
 interface UserIProps {
@@ -19,7 +16,8 @@ interface UserIProps {
   email: string;
   id?: string;
   created_at?: Date;
-  checkIns?: CheckIn[];
+  isActive: boolean;
+  isAdm: boolean;
 }
 
 interface LoginIProps {
@@ -43,14 +41,10 @@ export class UsersServices {
       throw new MyError("Login our password invalid", 400);
     }
 
-    const newUser = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      created_at: user.created_at,
+    return {
+      ...user,
+      password_hash: undefined,
     };
-
-    return newUser;
   };
 
   me = async (user_id: string) => {
@@ -71,13 +65,8 @@ export class UsersServices {
       name: user.name,
       email: user.email,
       created_at: user.created_at,
-      checkIns: user.checkIns?.map((checkins) => {
-        return {
-          id: checkins.id,
-          validatedAt: checkins.validated_at,
-          createdAt: checkins.created_at,
-        };
-      }),
+      isAdm: user.isAdm,
+      isActive: user.isActive,
     }));
 
     return newUsers;
@@ -91,21 +80,12 @@ export class UsersServices {
     }
 
     return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      created_at: user.created_at,
+      ...user,
+      password_hash: undefined,
     };
   };
 
-  create = async ({
-    email,
-    name,
-    password,
-    chaveApi,
-    isActive,
-    isAdm,
-  }: CreateUserIProps) => {
+  create = async ({ email, name, password, chaveApi }: CreateUserIProps) => {
     const password_hash = await hash(password, 10);
 
     const userWithSameEmail = await this.usersRepository.findOneForEmail(email);
@@ -119,21 +99,21 @@ export class UsersServices {
       name,
       password_hash,
       chaveApi,
-      isActive,
-      isAdm,
     };
 
     const user = await this.usersRepository.create(data);
 
-    return user;
+    return { ...user, password_hash: undefined };
   };
 
-  updated = async (id: string, data: CreateUserIProps) => {
-    const { name, email, password } = data;
+  updated = async (id: string, data: any) => {
+    const { name, email, password, chaveApi, isActive, isAdm } = data;
 
     const userExists = await this.usersRepository.findOneUser(id);
 
-    console.log(userExists);
+    if (!userExists) {
+      throw new MyError("User not found", 404);
+    }
 
     const password_hash = await hash(password, 10);
 
@@ -141,11 +121,38 @@ export class UsersServices {
       name,
       email,
       password_hash,
+      chaveApi,
+      isActive,
+      isAdm,
     };
 
     const user = await this.usersRepository.updated(userExists.id, newData);
 
-    return user;
+    return { ...user, password_hash: undefined };
+  };
+
+  updatedIsActive = async (id: string, userAplication: string) => {
+    const userExists = await this.usersRepository.findOneUser(id);
+
+    if (!userExists) {
+      throw new MyError("User not found", 404);
+    }
+
+    const userAdmin = await this.usersRepository.findOneUser(userAplication);
+
+    if (!userAdmin) {
+      throw new MyError("User not found", 404);
+    }
+
+    if (!userAdmin.isAdm) {
+      throw new MyError("You are not admin", 403);
+    }
+
+    const alterIsActive = userExists.isActive;
+
+    await this.usersRepository.updatedIsActive(userExists.id, !alterIsActive);
+
+    return;
   };
 
   delete = async (id: string) => {
@@ -157,6 +164,6 @@ export class UsersServices {
 
     const user = await this.usersRepository.delete(userAlreadyExists.id);
 
-    return user;
+    return { ...user, password_hash: undefined };
   };
 }

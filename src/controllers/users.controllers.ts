@@ -75,12 +75,11 @@ class UsersControllers {
       email: z.string().email(),
       password: z.string().min(6).max(30),
       chaveApi: z.string(),
-      isActive: z.boolean().default(false),
-      isAdm: z.boolean().default(false),
     });
 
-    const { email, name, password, chaveApi, isActive, isAdm } =
-      registerBodySchema.parse(req.body);
+    const { email, name, password, chaveApi } = registerBodySchema.parse(
+      req.body
+    );
 
     try {
       await usersServices.create({
@@ -88,8 +87,6 @@ class UsersControllers {
         name,
         password,
         chaveApi,
-        isActive,
-        isAdm,
       });
       return res.status(201).send();
     } catch (error) {
@@ -107,19 +104,40 @@ class UsersControllers {
       name: z.string().min(1).max(30),
       email: z.string().email(),
       password: z.string().min(6).max(30),
+      chaveApi: z.string(),
+      isActive: z.boolean().default(false),
+      isAdm: z.boolean().default(false),
     });
 
-    const { name, email, password } = updateBodySchema.parse(req.body);
+    const { name, email, password, chaveApi, isActive, isAdm } =
+      updateBodySchema.parse(req.body);
 
     try {
       const userUpdated = await usersServices.updated(id, {
         name,
         email,
         password,
+        chaveApi,
+        isActive,
+        isAdm,
       });
       return res.status(201).send(userUpdated);
     } catch (error) {
       return res.status(404).send({ message: "User not found" });
+    }
+  };
+
+  updatedIsActive = async (req: FastifyRequest, res: FastifyReply) => {
+    const { id } = req.params;
+    const userAplication = req.user.sub;
+
+    try {
+      await usersServices.updatedIsActive(id, userAplication);
+      return res.status(204).send();
+    } catch (error) {
+      if (error instanceof MyError) {
+        return res.status(error.status).send({ message: error.message });
+      }
     }
   };
 
