@@ -11,7 +11,7 @@
     "test:watch": "vitest",
     "starts": "ts-node-dev ./src/server.ts",
     "production": "node ./build/server.js",
-    "postinstall": "tsx"
+    "postinstall": "node ./build/server.js"
   },
   "keywords": [],
   "author": "",
