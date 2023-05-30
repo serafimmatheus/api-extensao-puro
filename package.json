@@ -9,7 +9,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "production": "node ./build/server.ts",
-    "postinstall": "tsc",
+    "postinstall": "tsup src --out-dir build",
     "start": "ts-node-dev ./src/server.ts"
   },
   "keywords": [],
