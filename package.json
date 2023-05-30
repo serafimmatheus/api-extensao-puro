@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "start": "node build/server.ts",
     "build": "tsup src --out-dir build",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "production": "node ./build/server.ts",
+    "postinstall": "tsc",
+    "start": "ts-node-dev ./src/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -37,5 +39,8 @@
     "fastify": "4.17.0",
     "jsonwebtoken": "9.0.0",
     "zod": "3.21.4"
+  },
+  "engines": {
+    "node": ">=18.X"
   }
 }
