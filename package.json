@@ -4,11 +4,9 @@
   "description": "1 - npm init -y",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "start": "node build/server.js",
-    "build": "tsup src --out-dir build",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "start": "ts-node-dev ./src/server.ts",
+    "production": "node ./build/server.js",
+    "postinstall": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -39,6 +37,6 @@
     "zod": "3.21.4"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=16.x"
   }
 }
