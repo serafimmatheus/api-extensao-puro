@@ -29,7 +29,12 @@ class UsersControllers {
         }
       );
 
-      const newUser = { ...user, password_hash: undefined };
+      const newUser = {
+        ...user,
+        password_hash: undefined,
+        created_at: undefined,
+        id: undefined,
+      };
 
       return res.status(200).send({ token, user: newUser });
     } catch (error) {
