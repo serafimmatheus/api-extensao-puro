@@ -29,7 +29,9 @@ class UsersControllers {
         }
       );
 
-      return res.status(200).send({ token });
+      const newUser = { ...user, password_hash: undefined };
+
+      return res.status(200).send({ token, user: newUser });
     } catch (error) {
       if (error instanceof MyError) {
         return res.status(error.status).send({ message: error.message });
