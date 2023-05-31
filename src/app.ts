@@ -1,5 +1,5 @@
 import fastify from "fastify";
-import fastifyCors from "fastify-cors";
+import fastifyCors from "@fastify/cors";
 import { appRoutes } from "./routes/routes";
 import { ZodError } from "zod";
 import { env } from "./env";
