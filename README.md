@@ -36,6 +36,8 @@ bibliotecas instaladas
 2 - npm i typescript @types/node tsx tsup -D
 3 - npx tsc --init
 4 - npm i fastify
+4.1 - npm i --save-dev @types/fastify-cors
+4.2 - npm i fastify-cors
 5 - npm i dotenv
 6 - npm i zod
 6 - npm i @rocketseat/eslint-config -D
