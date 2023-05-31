@@ -8,7 +8,7 @@ import fastifyJwt from "@fastify/jwt";
 export const app = fastify();
 
 app.register(fastifyCors, {
-  origin: ["http://localhost:3000", "https://painel-puro.vercel.app"],
+  origin: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type"],
 });
