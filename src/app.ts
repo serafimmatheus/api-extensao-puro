@@ -8,7 +8,11 @@ import fastifyJwt from "@fastify/jwt";
 export const app = fastify();
 
 app.register(fastifyCors, {
-  origin: ["http://localhost:3000", "https://admin-puro.vercel.app"],
+  origin: [
+    "http://localhost:3000",
+    "https://admin-puro.vercel.app",
+    "https://admin-puro-of75t48k1-serafimmatheus.vercel.app",
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type"],
 });
