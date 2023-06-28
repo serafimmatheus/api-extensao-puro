@@ -1,4 +1,5 @@
 import { usersControllers } from "@/controllers";
+import recursosUsersControllers from "@/controllers/recursosUsers.controllers";
 import { verifyJWT } from "@/middlewares/verify-jwt";
 import { FastifyInstance } from "fastify";
 
@@ -15,4 +16,8 @@ export async function appRoutes(app: FastifyInstance) {
     usersControllers.updatedIsActive
   );
   app.delete("/api/v1/users/:id", usersControllers.delete);
+
+  ///// ROTAS USERS AND RECURSOS
+
+  app.get("/api/v1/usersAndRecursos", recursosUsersControllers.all);
 }

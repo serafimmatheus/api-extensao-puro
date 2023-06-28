@@ -64,7 +64,10 @@ class UsersControllers {
   };
 
   findOneUser = async (req: FastifyRequest, res: FastifyReply) => {
-    const { id } = req.params;
+    const schemaBody = z.object({
+      id: z.string(),
+    });
+    const { id } = schemaBody.parse(req.params);
 
     try {
       const user = await usersServices.findOneUser(id);
@@ -94,18 +97,23 @@ class UsersControllers {
         name,
         password,
         chaveApi,
+        isActive: false,
+        isAdm: false,
       });
       return res.status(201).send();
     } catch (error) {
       if (error instanceof MyError) {
         return res.status(error.status).send({ message: error.message });
       }
-      return res.status(500).send({ message: "Internal server error." });
+      return res.status(500).send({ message: error });
     }
   };
 
   updated = async (req: FastifyRequest, res: FastifyReply) => {
-    const { id } = req.params;
+    const schemaBody = z.object({
+      id: z.string(),
+    });
+    const { id } = schemaBody.parse(req.params);
 
     const updateBodySchema = z.object({
       name: z.string().min(1).max(30),
@@ -135,7 +143,11 @@ class UsersControllers {
   };
 
   updatedIsActive = async (req: FastifyRequest, res: FastifyReply) => {
-    const { id } = req.params;
+    const schemaBody = z.object({
+      id: z.string(),
+    });
+
+    const { id } = schemaBody.parse(req.params);
     const userAplication = req.user.sub;
 
     try {
@@ -149,7 +161,10 @@ class UsersControllers {
   };
 
   delete = async (req: FastifyRequest, res: FastifyReply) => {
-    const { id } = req.params;
+    const schemaBody = z.object({
+      id: z.string(),
+    });
+    const { id } = schemaBody.parse(req.params);
 
     try {
       await usersServices.delete(id);

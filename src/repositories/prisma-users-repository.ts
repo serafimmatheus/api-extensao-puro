@@ -13,7 +13,11 @@ export interface UsersRepositoryProps {
 
 class PrismaUserRepository implements UsersRepositoryProps {
   allUsers = async () => {
-    return await prisma.user.findMany();
+    return await prisma.user.findMany({
+      include: {
+        recursos: true,
+      },
+    });
   };
 
   findOneForEmail = async (email: string) => {
