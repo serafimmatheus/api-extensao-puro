@@ -25,7 +25,7 @@ class UsersControllers {
         {
           sign: {
             sub: user.id,
-            expiresIn: "1d",
+            expiresIn: "2d",
           },
         }
       );
