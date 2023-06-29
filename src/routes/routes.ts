@@ -1,6 +1,7 @@
-import { usersControllers } from "@/controllers";
+import { recursoControllers, usersControllers } from "@/controllers";
 import recursosUsersControllers from "@/controllers/recursosUsers.controllers";
 import { verifyJWT } from "@/middlewares/verify-jwt";
+import { verifyIsAdmMiddleware } from "@/middlewares/verifyIsAdm.middleware";
 import { FastifyInstance } from "fastify";
 
 export async function appRoutes(app: FastifyInstance) {
@@ -17,7 +18,44 @@ export async function appRoutes(app: FastifyInstance) {
   );
   app.delete("/api/v1/users/:id", usersControllers.delete);
 
+  ///// ROTAS CRIACAO DE RECURSOS
+
+  app.get(
+    "/api/v1/recursos",
+    { onRequest: [verifyJWT] },
+    recursoControllers.all
+  );
+
+  app.post(
+    "/api/v1/cadastro/recursos",
+    { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
+    recursoControllers.create
+  );
+
+  app.post(
+    "/api/v1/cadastro/recurso",
+    { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
+    recursoControllers.createOne
+  );
+
+  app.put(
+    "/api/v1/recurso/:id",
+    { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
+    recursoControllers.updated
+  );
+
+  app.delete(
+    "/api/v1/recurso/:id",
+    { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
+    recursoControllers.deleted
+  );
+
   ///// ROTAS USERS AND RECURSOS
 
   app.get("/api/v1/usersAndRecursos", recursosUsersControllers.all);
+  app.post(
+    "/api/v1/cadastro/recursos/users",
+    { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
+    recursosUsersControllers.create
+  );
 }

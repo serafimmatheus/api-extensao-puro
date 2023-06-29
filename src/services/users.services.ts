@@ -126,7 +126,7 @@ export class UsersServices {
       isAdm,
     };
 
-    const user = await this.usersRepository.updated(userExists.id, newData);
+    const user = await this.usersRepository.updated(newData, userExists.id);
 
     return { ...user, password_hash: undefined };
   };

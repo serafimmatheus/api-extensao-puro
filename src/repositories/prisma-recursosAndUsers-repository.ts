@@ -1,15 +1,31 @@
 import { prisma } from "@/database/prisma";
-import { RecursoUser } from "@prisma/client";
+import { Prisma, RecursoUser } from "@prisma/client";
 
 export interface IPropsPrismaRecursosUsersRepository {
-  all: () => Promise<RecursoUser[]>;
+  all: (id: string) => Promise<RecursoUser[]>;
+  create: (data: Prisma.RecursoUserCreateInput) => Promise<RecursoUser>;
 }
 
 class PrismaRecursosUsersRepository
   implements IPropsPrismaRecursosUsersRepository
 {
-  all = async () => {
-    return await prisma.recursoUser.findMany();
+  all = async (id: string) => {
+    return await prisma.recursoUser.findMany({
+      where: {
+        userId: id,
+      },
+
+      include: {
+        user: true,
+        recurso: true,
+      },
+    });
+  };
+
+  create = async (data: Prisma.RecursoUserCreateInput) => {
+    return await prisma.recursoUser.create({
+      data,
+    });
   };
 }
 
