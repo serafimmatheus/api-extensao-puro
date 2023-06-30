@@ -27,6 +27,6 @@ export async function verifyIsAdmMiddleware(
       return res.status(401).send({ message: "Unauthorized." });
     }
   } catch (error) {
-    return res.status(401).send({ message: "Unauthorized." });
+    return res.status(401).send({ message: "Inserir um token válido." });
   }
 }
