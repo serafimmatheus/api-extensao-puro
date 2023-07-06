@@ -15,7 +15,7 @@ model User {
   id            String        @id @default(uuid())
   name          String
   email         String        @unique
-  siteUrl       String        @default("undefined")
+  siteUrl       String
   password_hash String
   chaveApi      String
   created_at    DateTime      @default(now())
