@@ -86,17 +86,18 @@ class UsersControllers {
       email: z.string().email(),
       password: z.string().min(6).max(30),
       chaveApi: z.string(),
+      siteUrl: z.string(),
     });
 
-    const { email, name, password, chaveApi } = registerBodySchema.parse(
-      req.body
-    );
+    const { email, name, password, chaveApi, siteUrl } =
+      registerBodySchema.parse(req.body);
 
     try {
       await usersServices.create({
         email,
         name,
         password,
+        siteUrl,
         chaveApi,
         isActive: false,
         isAdm: false,
@@ -117,25 +118,18 @@ class UsersControllers {
     const { id } = schemaBody.parse(req.params);
 
     const updateBodySchema = z.object({
-      name: z.string().min(1).max(30),
-      email: z.string().email(),
-      password: z.string().min(6).max(30),
-      chaveApi: z.string(),
-      isActive: z.boolean().default(false),
-      isAdm: z.boolean().default(false),
+      name: z.string().min(1).max(30).optional(),
+      chaveApi: z.string().optional(),
+      siteUrl: z.string().optional(),
     });
 
-    const { name, email, password, chaveApi, isActive, isAdm } =
-      updateBodySchema.parse(req.body);
+    const { name, chaveApi, siteUrl } = updateBodySchema.parse(req.body);
 
     try {
       const userUpdated = await usersServices.updated(id, {
         name,
-        email,
-        password,
         chaveApi,
-        isActive,
-        isAdm,
+        siteUrl,
       });
       return res.status(201).send(userUpdated);
     } catch (error) {

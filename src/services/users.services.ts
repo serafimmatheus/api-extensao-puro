@@ -9,6 +9,7 @@ interface CreateUserIProps {
   chaveApi: string;
   isActive: boolean;
   isAdm: boolean;
+  siteUrl: string;
 }
 
 interface UserIProps {
@@ -18,6 +19,7 @@ interface UserIProps {
   created_at?: Date;
   isActive: boolean;
   isAdm: boolean;
+  siteUrl: string;
 }
 
 interface LoginIProps {
@@ -64,6 +66,7 @@ export class UsersServices {
       id: user.id,
       name: user.name,
       email: user.email,
+      siteUrl: user.siteUrl,
       created_at: user.created_at,
       isAdm: user.isAdm,
       isActive: user.isActive,
@@ -85,7 +88,13 @@ export class UsersServices {
     };
   };
 
-  create = async ({ email, name, password, chaveApi }: CreateUserIProps) => {
+  create = async ({
+    email,
+    name,
+    password,
+    chaveApi,
+    siteUrl,
+  }: CreateUserIProps) => {
     const password_hash = await hash(password, 10);
 
     const userWithSameEmail = await this.usersRepository.findOneForEmail(email);
@@ -99,6 +108,7 @@ export class UsersServices {
       name,
       password_hash,
       chaveApi,
+      siteUrl,
     };
 
     const user = await this.usersRepository.create(data);
@@ -107,7 +117,7 @@ export class UsersServices {
   };
 
   updated = async (id: string, data: any) => {
-    const { name, email, password, chaveApi, isActive, isAdm } = data;
+    const { name, chaveApi, siteUrl } = data;
 
     const userExists = await this.usersRepository.findOneUser(id);
 
@@ -115,15 +125,10 @@ export class UsersServices {
       throw new MyError("User not found", 404);
     }
 
-    const password_hash = await hash(password, 10);
-
     const newData = {
       name,
-      email,
-      password_hash,
       chaveApi,
-      isActive,
-      isAdm,
+      siteUrl,
     };
 
     const user = await this.usersRepository.updated(newData, userExists.id);

@@ -5,18 +5,34 @@ import { verifyIsAdmMiddleware } from "@/middlewares/verifyIsAdm.middleware";
 import { FastifyInstance } from "fastify";
 
 export async function appRoutes(app: FastifyInstance) {
-  app.get("/api/v1/users", usersControllers.findAll);
-  app.get("/api/v1/users/:id", usersControllers.findOneUser);
+  app.get(
+    "/api/v1/users",
+    { onRequest: [verifyJWT] },
+    usersControllers.findAll
+  );
+  app.get(
+    "/api/v1/users/:id",
+    { onRequest: [verifyJWT] },
+    usersControllers.findOneUser
+  );
   app.get("/api/v1/me", { onRequest: [verifyJWT] }, usersControllers.me);
   app.post("/api/v1/users", usersControllers.create);
   app.post("/api/v1/users/login", usersControllers.login);
-  app.patch("/api/v1/users/:id", usersControllers.updated);
-  app.patch(
+  app.put(
+    "/api/v1/users/:id",
+    { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
+    usersControllers.updated
+  );
+  app.put(
     "/api/v1/users/extensionActive/:id",
-    { onRequest: [verifyJWT] },
+    { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
     usersControllers.updatedIsActive
   );
-  app.delete("/api/v1/users/:id", usersControllers.delete);
+  app.delete(
+    "/api/v1/users/:id",
+    { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
+    usersControllers.delete
+  );
 
   ///// ROTAS CRIACAO DE RECURSOS
 

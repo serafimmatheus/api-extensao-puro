@@ -1,13 +1,18 @@
 import { prisma } from "@/database/prisma";
 import { Prisma, User } from "@prisma/client";
 
+interface IPropsUpdateUser {
+  name: string;
+  chaveApi: string;
+  siteUrl: string;
+}
 export interface UsersRepositoryProps {
   create: (data: Prisma.UserCreateInput) => Promise<User>;
   allUsers: () => Promise<User[]>;
   findOneForEmail: (email: string) => Promise<User | null>;
   delete: (id: string) => Promise<User>;
   findOneUser: (id: string) => Promise<User | null>;
-  updated: (data: Prisma.UserCreateInput, id: string) => Promise<User>;
+  updated: (data: IPropsUpdateUser, id: string) => Promise<User>;
   updatedIsActive: (id: string, isActive: boolean) => Promise<User>;
 }
 
@@ -42,7 +47,7 @@ class PrismaUserRepository implements UsersRepositoryProps {
     return user;
   };
 
-  updated = async (data: Prisma.UserCreateInput, id: string) => {
+  updated = async (data: IPropsUpdateUser, id: string) => {
     const user = await prisma.user.update({
       data,
       where: {
