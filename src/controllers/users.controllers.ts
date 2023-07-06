@@ -86,21 +86,21 @@ class UsersControllers {
       email: z.string().email(),
       password: z.string().min(6).max(30),
       chaveApi: z.string(),
+      siteUrl: z.string(),
     });
 
-    const { email, name, password, chaveApi } = registerBodySchema.parse(
-      req.body
-    );
+    const { email, name, password, chaveApi, siteUrl } =
+      registerBodySchema.parse(req.body);
 
     try {
       await usersServices.create({
         email,
         name,
+        siteUrl,
         password,
         chaveApi,
         isActive: false,
         isAdm: false,
-        siteUrl: "undefined",
       });
       return res.status(201).send();
     } catch (error) {
