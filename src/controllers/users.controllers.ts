@@ -86,7 +86,7 @@ class UsersControllers {
       email: z.string().email(),
       password: z.string().min(6).max(30),
       chaveApi: z.string(),
-      siteUrl: z.string(),
+      siteUrl: z.string().optional().default("undefined"),
     });
 
     const { email, name, password, chaveApi, siteUrl } =
