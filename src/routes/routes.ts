@@ -2,6 +2,7 @@ import { recursoControllers, usersControllers } from "@/controllers";
 import recursosUsersControllers from "@/controllers/recursosUsers.controllers";
 import { verifyJWT } from "@/middlewares/verify-jwt";
 import { verifyIsAdmMiddleware } from "@/middlewares/verifyIsAdm.middleware";
+import { verifyIsAdmAndUserTokenMiddleware } from "@/middlewares/verifyIsAdmAndUserToken.middleware";
 import { FastifyInstance } from "fastify";
 
 export async function appRoutes(app: FastifyInstance) {
@@ -25,12 +26,12 @@ export async function appRoutes(app: FastifyInstance) {
   );
   app.put(
     "/api/v1/users/extensionActive/:id",
-    { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
+    { onRequest: [verifyJWT, verifyIsAdmAndUserTokenMiddleware] },
     usersControllers.updatedIsActive
   );
   app.delete(
     "/api/v1/users/:id",
-    { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
+    { onRequest: [verifyJWT, verifyIsAdmAndUserTokenMiddleware] },
     usersControllers.delete
   );
 
