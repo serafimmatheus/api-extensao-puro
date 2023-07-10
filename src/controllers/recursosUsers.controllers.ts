@@ -29,6 +29,7 @@ class RecursosUsersControllers {
     const bodySchema = z.object({
       recursoId: z.string(),
       userId: z.string(),
+      conteudo: z.string(),
     });
 
     const data = bodySchema.parse(req.body);
@@ -39,6 +40,43 @@ class RecursosUsersControllers {
       return res.status(201).send(recursoUser);
     } catch (error) {
       return res.status(500).send({ message: error });
+    }
+  };
+
+  updated = async (req: FastifyRequest, res: FastifyReply) => {
+    const bodySchema = z.object({
+      conteudo: z.string(),
+    });
+
+    const schemaParams = z.object({
+      id: z.string(),
+    });
+
+    const { id } = schemaParams.parse(req.params);
+
+    const data = bodySchema.parse(req.body);
+
+    try {
+      await recursosUsersServices.updated(id, data);
+
+      return res.status(204).send();
+    } catch (error) {
+      return res.status(400).send({ message: error });
+    }
+  };
+
+  deleted = async (req: FastifyRequest, res: FastifyReply) => {
+    const schemaParams = z.object({
+      id: z.string(),
+    });
+
+    const { id } = schemaParams.parse(req.params);
+
+    try {
+      await recursosUsersServices.deleted(id);
+      return res.status(204).send();
+    } catch (error) {
+      return res.status(400).send({ message: error });
     }
   };
 }

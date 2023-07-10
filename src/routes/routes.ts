@@ -75,4 +75,16 @@ export async function appRoutes(app: FastifyInstance) {
     { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
     recursosUsersControllers.create
   );
+
+  app.put(
+    "/api/v1/updated/recursos/users/:id",
+    { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
+    recursosUsersControllers.updated
+  );
+
+  app.delete(
+    "/api/v1/deleted/recursos/users/:id",
+    { onRequest: [verifyJWT, verifyIsAdmMiddleware] },
+    recursosUsersControllers.deleted
+  );
 }
