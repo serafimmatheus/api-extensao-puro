@@ -142,11 +142,17 @@ class UsersControllers {
       id: z.string(),
     });
 
+    const schemaBodyActive = z.object({
+      isActive: z.boolean(),
+    });
+
     const { id } = schemaBody.parse(req.params);
+    const { isActive } = schemaBodyActive.parse(req.body);
+
     const userAplication = req.user.sub;
 
     try {
-      await usersServices.updatedIsActive(id, userAplication);
+      await usersServices.updatedIsActive(id, userAplication, isActive);
       return res.status(204).send();
     } catch (error) {
       if (error instanceof MyError) {

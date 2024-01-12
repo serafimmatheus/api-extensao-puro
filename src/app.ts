@@ -10,7 +10,7 @@ export const app = fastify();
 app.register(fastifyCors, {
   origin: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "fastify-content-type"],
   exposedHeaders: ["Authorization"],
   credentials: true,
 });
@@ -34,5 +34,5 @@ app.setErrorHandler((error, req, res) => {
     // TODO fazer integracao com um log de erro de alguma ferramenta externa qnd tiver em producao
   }
 
-  return res.status(500).send({ message: "Internal server error" });
+  return res.status(500).send({ message: error });
 });

@@ -136,7 +136,11 @@ export class UsersServices {
     return { ...user, password_hash: undefined };
   };
 
-  updatedIsActive = async (id: string, userAplication: string) => {
+  updatedIsActive = async (
+    id: string,
+    userAplication: string,
+    isActive: boolean
+  ) => {
     const userExists = await this.usersRepository.findOneUser(id);
 
     if (!userExists) {
@@ -153,9 +157,7 @@ export class UsersServices {
       throw new MyError("You are not admin", 403);
     }
 
-    const alterIsActive = userExists.isActive;
-
-    await this.usersRepository.updatedIsActive(userExists.id, !alterIsActive);
+    await this.usersRepository.updatedIsActive(userExists.id, isActive);
 
     return;
   };

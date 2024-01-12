@@ -28,15 +28,15 @@ export async function verifyIsAdmAndUserTokenMiddleware(
     });
 
     if (!user) {
-      return res.status(401).send({ message: "Unauthorized." });
-    }
-
-    if (id === token.sub) {
-      return next();
+      return res.status(401).send({ message: "Unauthorized!." });
     }
 
     if (!user.isAdm) {
-      return res.status(401).send({ message: "Unauthorized." });
+      return res.status(401).send({ message: "Unauthorized.!" });
+    }
+
+    if (id === token.sub || id !== token.sub) {
+      return next();
     }
   } catch (error) {
     return res.status(401).send({ message: "Inserir um token válido." });
